@@ -1,0 +1,78 @@
+/* 带头部导航栏的页面 */
+.page-with-nav-top
+	min-height 100vh
+	box-sizing border-box
+	padding-top 0.96rem
+/* variables */
+$gray = #f5f4f4
+/* common style */
+html
+	max-height 100vh
+	overflow-x hidden
+	overflow-y scroll
+	font-size 100px
+body
+	width 100%
+	background-color $gray
+p
+	margin 0
+	padding 0
+h1, h2, h3, h4, h5, h6
+	font-weight normal
+	margin 0
+	padding 0
+a
+	cursor pointer
+/* vant reset */
+div.jy-header
+	.header-swiper
+		.van-swipe__indicators
+			bottom 0.75rem
+div.nav-top
+	.van-nav-bar
+		height 0.96rem
+		line-height 0.96rem
+		box-sizing border-box
+	.van-nav-bar__title
+		font-size 0.36rem
+	.van-icon
+		color #333333
+		font-size 0.36rem
+	.van-nav-bar__right
+		.van-nav-bar__text
+			font-size 0.36rem
+			color #333333
+div.join-us
+	.van-nav-bar
+		background-color transparent
+	.van-icon
+		color #ffffff
+	.van-nav-bar__title
+		color #ffffff
+div.button-with-green
+	display flex
+	button
+		width 100%
+		font-size 0.4rem
+		background-color #f3fff6
+		border-color #00a100
+		border-radius 0.1rem
+div.member-list
+	.van-search
+		padding 0.25rem 0.2rem
+		background-color transparent !important
+		img
+			display block
+			width 0.35rem
+			height 0.35rem
+		.van-cell__value
+			padding-left 0.38rem
+	.van-cell
+		padding-top 0
+		padding-bottom 0
+		line-height 0.75rem
+		align-items center
+		font-size 0.28rem
+		color #676767
+	.van-icon-search
+		font-size 0.35rem
