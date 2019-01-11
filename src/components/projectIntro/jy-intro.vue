@@ -19,10 +19,20 @@ export default {
 		}
 	},
 	created() {
+		this.$toast.loading({
+			mask: false,
+			message: '加载中...'
+		});
+
 		this.$http.get('/app/index/articleDetail',
 			{ params: { id: '1234567890' } }).then(reponse => {
-				reponse = reponse.body
-				this.content = reponse.data.content
+				setTimeout(() => {
+					this.$toast.clear()
+					reponse = reponse.body
+					this.content = reponse.data.content
+				}, 500);
+
+
 			})
 	}
 }

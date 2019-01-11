@@ -4,16 +4,28 @@
 			<NavTop :title="title"/>
 			<div class="from-group">
 				<div class="input-group">
-					<van-field v-model="userName" label="姓名：" placeholder="会员姓名"/>
+					<van-field v-model="userName" label="姓名：" required placeholder="会员姓名"/>
 				</div>
 				<div class="input-group">
-					<van-field v-model="phone" label="手机号：" placeholder="手机号"/>
+					<van-field v-model="sex" label="性别" placeholder="会员性别" @click="showSexPopup"/>
+				</div>
+				<div class="input-group">
+					<van-field v-model="phone" label="手机号：" required placeholder="手机号"/>
 				</div>
 				<div class="input-group">
 					<van-field v-model="password" label="密码：" placeholder="默认初始密码123456" type="password"/>
 				</div>
+				<div class="input-group">
+					<van-field v-model="confirmPaasword" label="确认密码：" placeholder="请确认密码" type="password"/>
+				</div>
 				<div class="input-group last-group">
-					<van-field v-model="brithday" label="出生年月：" placeholder="出生年月" @click="showDataPopup"/>
+					<van-field
+						v-model="brithday"
+						label="出生年月："
+						required
+						placeholder="出生年月"
+						@click="showDataPopup"
+					/>
 				</div>
 			</div>
 			<div class="button-group">
@@ -23,7 +35,7 @@
 			</div>
 
 			<!-- 时间日期弹出层 -->
-			<van-popup v-model="show" position="bottom">
+			<van-popup v-model="dataShow" position="bottom">
 				<van-datetime-picker
 					v-model="currentDate"
 					type="date"
@@ -31,7 +43,18 @@
 					:min-date="minDate"
 					:max-date="maxDate"
 					@cancel="cancel"
-					@confirm="cancel"
+					@confirm="getSelectedDate"
+				/>
+			</van-popup>
+
+			<!-- 性别选择弹出层 -->
+			<van-popup v-model="sexShow" position="bottom">
+				<van-picker
+					ref="sex-picker"
+					:columns="columns"
+					show-toolbar
+					@cancel="cancelSex "
+					@confirm="getSelectedSex"
 				/>
 			</van-popup>
 		</div>
@@ -47,11 +70,18 @@ export default {
 			title: '添加会员',
 
 			userName: '',
+			sex: '',
+			sexIndex: '',
 			phone: '',
 			password: '',
+			confirmPaasword: '',
 			brithday: '',
+			shopCode: '',
+
 			disabled: true,
-			show: false,
+			dataShow: false,
+			sexShow: false,
+			columns: ['女', '男'],
 			minDate: new Date(1949, 10, 1),
 			maxDate: new Date(),
 			currentDate: new Date()
@@ -59,11 +89,26 @@ export default {
 	},
 	methods: {
 		submitAdd() {
-			alert('提交')
+			// alert('提交')
 		},
+
+		//时间日期选择弹出层
 		showDataPopup() {
-			this.show = true
+			this.dataShow = true
 		},
+		cancel() {
+			this.dataShow = false
+		},
+
+		// 性别选择弹出层
+		showSexPopup() {
+			this.sexShow = true
+		},
+		cancelSex() {
+			this.sexShow = false
+		},
+
+
 		formatter(type, value) {
 			if (type === 'year') {
 				return `${value}年`;
@@ -74,12 +119,38 @@ export default {
 			}
 			return value;
 		},
-		cancel() {
-			this.show = false
+
+		// 获得生日
+		getSelectedDate(value) {
+			let date = new Date(value)
+			date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
+			this.brithday = date
+			this.dataShow = false
+
 		},
-		// selecteDate() {
-		// 	console.log(getValues())
-		// }
+
+		// 获得性别
+		getSelectedSex(value, index) {
+			this.sex = value
+			this.sexIndex = index
+			this.sexShow = false
+		},
+
+		// 请求
+		submitAdd() {
+			this.$http.get('/app/shop/addMember', {
+				params: {
+					nickName: this.userName,
+					phoneNumber: this.phone,
+					password: this.password,
+					birthday: this.brithday,
+					shopCode: this.shopCode
+				}
+			}).then(reponse => {
+				reponse = reponse.body
+			})
+		}
+
 	}
 }
 </script>

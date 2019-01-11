@@ -29,6 +29,14 @@ export default {
 			// 头部导航配置参数
 			title: '新闻中心'
 		}
+	},
+	created() {
+		this.$http.get('/app/index/newsList', {
+			params: {}
+		}).then(reponse => {
+			reponse = reponse.body
+			console.log(reponse)
+		})
 	}
 }
 </script>

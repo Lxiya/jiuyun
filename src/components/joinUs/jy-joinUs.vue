@@ -58,7 +58,11 @@ export default {
 		insertQuickMessage(message) {
 			this.message = message
 		},
+
+		// 提交加盟申请
 		submitJoin() {
+			this.$toast.loading({ mask: false, message: '处理中...' });
+
 			this.$http.get('/app/index/jamengSave', {
 				params: {
 					name: this.userName,
@@ -66,7 +70,17 @@ export default {
 					remark: this.message
 				}
 			}).then(reponse => {
-				reponse = reponse.body
+				setTimeout(() => {
+					this.$toast.clear()
+					reponse = reponse.body
+					if (reponse.success) {
+						this.$toast.success('提交成功!')
+						setTimeout(() => {
+							this.$toast.clear()
+							this.$router.replace('/')
+						}, 1000);
+					}
+				}, 1000);
 			})
 		}
 	},
@@ -118,7 +132,7 @@ export default {
 				top 0.15rem
 				width 93%
 				padding-top 0.54rem
-				padding-bottom 0.83rem
+				padding-bottom 0.5rem
 				padding-left 0.35rem
 				padding-right 0.35rem
 				box-sizing border-box

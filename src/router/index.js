@@ -10,6 +10,8 @@ import jyNewsCenter from '@/components/newsList/jy-newsCenter'
 
 import jyMemberList from '@/components/memberList/jy-memberList'
 import jyMemberAdd from '@/components/memberAdd/jy-memberAdd'
+import jyMemberDetail from '@/components/memberDetail/jy-memberDetail'
+import jyAddSuccess from '@/components/memberAdd/jy-addSuccess'
 
 Vue.use(Router)
 
@@ -52,6 +54,14 @@ export default new Router({
     {
       path: '/store/memberAdd',
       component: jyMemberAdd
+    },
+    {
+      path: '/store/memberDetail',
+      component: jyMemberDetail
+    },
+    {
+      path: '/store/memberAddSuccess',
+      component: jyAddSuccess
     }
   ],
   linkActiveClass: 'active'
