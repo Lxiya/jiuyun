@@ -33,6 +33,7 @@ export default {
 <style lang="stylus" scoped>
 div.index
 	position relative
+	min-height 4.38rem
 	.jy-header-nav
 		position absolute
 		left 0

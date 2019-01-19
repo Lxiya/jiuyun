@@ -4,33 +4,25 @@
 			<RadiusBg>
 				<div slot="content">
 					<div class="icon-list">
-						<router-link to="/index/intro">
-							<div class="icon">
-								<img src="static/images/projectIntro.png" class="intro" alt>
-								<p>项目介绍</p>
-							</div>
-						</router-link>
+						<div class="icon" @click="goAppActivity(''+activityPath+'/index/intro','项目介绍')">
+							<img src="static/images/projectIntro.png" class="intro" alt>
+							<p>项目介绍</p>
+						</div>
 
-						<router-link to="/index/joinUs">
-							<div class="icon">
-								<img src="static/images/joinUs.png" class="join" alt>
-								<p>加盟申请</p>
-							</div>
-						</router-link>
+						<div class="icon" @click="goAppActivity(''+activityPath+'/index/joinUs','加盟申请')">
+							<img src="static/images/joinUs.png" class="join" alt>
+							<p>加盟申请</p>
+						</div>
 
-						<router-link to="/index/newsCenter">
-							<div class="icon">
-								<img src="static/images/newsCurrent.png" class="news" alt>
-								<p>新闻中心</p>
-							</div>
-						</router-link>
+						<div class="icon" @click="goAppActivity(''+activityPath+'/index/newsCenter','新闻中心')">
+							<img src="static/images/newsCurrent.png" class="news" alt>
+							<p>新闻中心</p>
+						</div>
 
-						<router-link to="/index/concat">
-							<div class="icon">
-								<img src="static/images/concatUs.png" class="concat" alt>
-								<p>联系我们</p>
-							</div>
-						</router-link>
+						<div class="icon" @click="goAppActivity(''+activityPath+'/index/concat','联系我们')">
+							<img src="static/images/concatUs.png" class="concat" alt>
+							<p>联系我们</p>
+						</div>
 					</div>
 				</div>
 			</RadiusBg>

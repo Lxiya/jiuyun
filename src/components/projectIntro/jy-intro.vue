@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<div class="project-intro page-with-nav-top">
-			<NavTop :title="title"/>
+		<div class="project-intro">
+			<!-- <NavTop :title="title"/> -->
 			<div class="intro-content" v-html="content"></div>
 		</div>
 	</div>
@@ -19,15 +19,9 @@ export default {
 		}
 	},
 	created() {
-		this.$toast.loading({
-			mask: false,
-			message: '加载中...'
-		});
-
 		this.$http.get('/app/index/articleDetail',
 			{ params: { id: '1234567890' } }).then(reponse => {
 				setTimeout(() => {
-					this.$toast.clear()
 					reponse = reponse.body
 					this.content = reponse.data.content
 				}, 500);

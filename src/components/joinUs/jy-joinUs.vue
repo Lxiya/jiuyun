@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<div class="join-us">
-			<NavTop :title="title" :border="border"/>
 			<div class="join-us-content">
 				<div class="join-banner">
 					<img src="static/images/joinUs-banner.png" alt>
@@ -14,7 +13,7 @@
 								<van-field v-model="userName" label="姓名："/>
 							</div>
 							<div class="input-group" style="margin-bottom:0.27rem">
-								<van-field v-model="phone" label="电话："/>
+								<van-field v-model="phone" label="电话：" type="number"/>
 							</div>
 							<div class="last-group input-group leave-message">
 								<van-field v-model="message" type="textarea" placeholder="添加您的留言" rows="3" autosize/>
@@ -66,7 +65,7 @@ export default {
 			this.$http.get('/app/index/jamengSave', {
 				params: {
 					name: this.userName,
-					telephone: this.phone,
+					phoneNumber: this.phone,
 					remark: this.message
 				}
 			}).then(reponse => {
@@ -77,7 +76,7 @@ export default {
 						this.$toast.success('提交成功!')
 						setTimeout(() => {
 							this.$toast.clear()
-							this.$router.replace('/')
+							window.closeActJsImpl.closeActJsImpl()
 						}, 1000);
 					}
 				}, 1000);
@@ -86,11 +85,7 @@ export default {
 	},
 	watch: {
 		phone: function () {
-			if ((/^1[34578]\d{9}$/.test(this.phone)) && this.userName.trim() != '') {
-				this.disabled = false
-			} else {
-				this.disabled = true
-			}
+			this.disabled = !((/^1[34578]\d{9}$/.test(this.phone)) && this.userName.trim() != '')
 		}
 	}
 }

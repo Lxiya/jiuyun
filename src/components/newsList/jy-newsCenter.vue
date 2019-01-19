@@ -1,19 +1,20 @@
 <template>
 	<div>
 		<div class="news-center page-with-nav-top">
-			<NavTop :title="title"/>
 			<div class="news-center-list">
 				<!-- a news start -->
-				<div class="list-item">
-					<div class="item-title">平台最新公告，凡是2018年12月18号</div>
-					<div class="item-intro">免费领取一瓶五粮液酒水，时间截止时间在2018年12月30号之前。敬请关注</div>
-					<div class="item-time-detail">
-						<div class="time">2018-02-21</div>
-						<div class="go-detail">
-							查看详情
-							<span class="lt">&gt;</span>
+				<div class="list-item" v-for="(item,index) in newsList">
+					<router-link :to="{path:'/index/news/newsContent/'+item.id+''}">
+						<div class="item-title">{{item.artName}}</div>
+						<div class="item-intro">{{item.jianjie}}</div>
+						<div class="item-time-detail">
+							<div class="time">{{item.createTime2}}</div>
+							<div class="go-detail">
+								查看详情
+								<span class="lt">&gt;</span>
+							</div>
 						</div>
-					</div>
+					</router-link>
 				</div>
 				<!-- a news end -->
 			</div>
@@ -27,28 +28,38 @@ export default {
 	data() {
 		return {
 			// 头部导航配置参数
-			title: '新闻中心'
+			title: '新闻中心',
+
+			newsList: []
 		}
 	},
 	created() {
 		this.$http.get('/app/index/newsList', {
-			params: {}
+			params: {
+				page: 1,
+				size: 10
+			}
 		}).then(reponse => {
-			reponse = reponse.body
-			console.log(reponse)
+			setTimeout(() => {
+				reponse = reponse.body
+				this.newsList = reponse.data.list
+
+				console.log(reponse)
+			}, 500);
 		})
 	}
 }
 </script>
 
 <style lang="stylus">
-.page-with-nav-top.news-center
-	padding-top 1.22rem
 .news-center
 	.news-center-list
 		.list-item
 			padding 0.43rem 0.35rem
+			margin-bottom 0.26rem
 			background-color #fff
+			&:last-child
+				margin-bottom 0
 			.item-title
 				margin-bottom 0.25rem
 				font-size 0.3rem

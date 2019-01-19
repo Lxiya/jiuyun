@@ -1,14 +1,11 @@
 <template>
 	<div>
-		<div class="news-content page-with-nav-top">
-			<NavTop :title="title"/>
+		<div class="news-content">
 			<div class="gray-bg"></div>
 			<div class="new-content-detail">
-				<div class="detail-title">
-					平台最新公告，凡是2018年12月18号之前注
-					册用户请注意
-				</div>
-				<div class="detail-create-time">发布时间：2018-12-30</div>
+				<div class="detail-title">{{newsTitle}}</div>
+				<div class="detail-create-time">{{createTime}}</div>
+				<div class="detail-content" v-html="content"></div>
 			</div>
 		</div>
 	</div>
@@ -19,14 +16,44 @@ export default {
 	name: 'jyNewsContent',
 	data() {
 		return {
-			title: '新闻详情'
+			// 头部导航配置参数
+			title: '新闻详情',
+
+			newsId: '',
+			newsTitle: '',
+			content: '',
+			createTime: ''
 		}
+	},
+	created() {
+		this.$toast.loading('加载中...')
+
+		this.newsId = this.$route.params.id
+
+
+		this.$http.get('/app/index/articleDetail', {
+			params: {
+				id: this.newsId
+			}
+		}).then(reponse => {
+			setTimeout(() => {
+				this.$toast.clear()
+
+				let data = reponse.body.data
+
+				this.newsTitle = data.artName
+				this.createTime = data.time
+				this.content = data.content
+			}, 500);
+
+		})
 	}
 }
 </script>
 
 <style lang="stylus" scoped>
 .news-content
+	height 100vh
 	background-color #fff
 	.gray-bg
 		height 0.2rem

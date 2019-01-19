@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="header-swiper">
-			<van-swipe :autoplay="3000" indicator-color="white">
+			<van-swipe indicator-color="white">
 				<van-swipe-item v-for="(image,index) in images" :key="index">
 					<img :src="image">
 				</van-swipe-item>
@@ -28,6 +28,7 @@ export default {
 
 <style lang="stylus" scoped>
 .header-swiper
+	box-sizing border-box
 	img
 		display block
 		max-width 100%

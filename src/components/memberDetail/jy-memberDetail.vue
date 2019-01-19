@@ -1,22 +1,22 @@
 <template>
 	<div>
-		<div class="member-detail page-with-nav-top">
+		<div class="member-detail page-with-nav-top top">
 			<NavTop :title="title"/>
 			<div class="detail-top">
 				<div class="detail-img">
 					<img src="static/images/member-icon-default-man.png" alt>
 				</div>
 				<div class="detail-info">
-					<p>会员：王崇</p>
-					<p>手机：18754635656</p>
-					<p>积分：6324</p>
-					<p>编号：be638545341</p>
+					<p>会员：{{User.nickName}}</p>
+					<p>手机：{{User.phoneNumber}}</p>
+					<p>积分：{{User.integral}}</p>
+					<p>编号：{{User.userNumber}}</p>
 				</div>
 			</div>
 			<div class="detail-content">
 				<h1>
 					当前积分
-					<span class="integral-number">{{userIntegral}}</span>
+					<span class="integral-number">{{User.integral}}</span>
 					积分
 				</h1>
 				<div class="change-integral">
@@ -46,7 +46,7 @@
 			</div>
 			<div class="button-group">
 				<div class="button-with-green">
-					<van-button :disabled="disabled" plain type="primary">修改</van-button>
+					<van-button :disabled="disabled" plain type="primary" @click="submitChange()">修改</van-button>
 				</div>
 			</div>
 		</div>
@@ -81,25 +81,27 @@ export default {
 			numberTabsAdd: [+200, +600, +800],
 			numberTabsMinus: [-200, -600, -800],
 			numberTabs: [],
-			// 用户当前积分
-			userIntegral: 1000,
+
 			// 用户自定义输入的积分
 			show: false,
 			showConfirmButton: false,
 			userSymbol: 0,//操作标识，0为减少积分，1为增加积分,当为减积分的时候用户将用户输入的积分✖-1
-			userInput: ''//用户输入的积分
+			userInput: '',//用户输入的积分
+
+			User: {}
 		}
 	},
 	computed: {
 		// 计算后的新积分
 		newIntegral: {
 			get: function () {
-				return this.userIntegral
+				return this.User.integral
 			},
 			set: function (value) {
-				this.userIntegral = (this.userIntegral += Number.parseInt(value))
-				if (this.userIntegral <= 0) {
-					this.userIntegral = 0
+				this.User.integral = Number.parseInt(this.User.integral)
+				this.User.integral = this.User.integral += Number.parseInt(value)
+				if (this.User.integral <= 0) {
+					this.User.integral = 0
 				}
 			}
 		},
@@ -129,12 +131,8 @@ export default {
 		modifyIntegral(type) {
 			this.modify = true
 			this.userSymbol = type
-			if (type == 0) {
-				this.numberTabs = this.numberTabsMinus
-			}
-			if (type == 1) {
-				this.numberTabs = this.numberTabsAdd
-			}
+
+			type ? this.numberTabs = this.numberTabsAdd : this.numberTabs = this.numberTabsMinus
 		},
 
 		// 修改积分
@@ -160,14 +158,52 @@ export default {
 			this.clickedTabs.push(this.userInput)
 		},
 
+		// 提交最终修改
+		submitChange() {
+			this.$toast.loading({ mask: false, message: '处理中...' });
+
+			this.$http.get('/app/shop/updIntegral', {
+				params: {
+					id: this.id,
+					integral: (this.User.integral).toString()
+				}
+			}).then(reponse => {
+				setTimeout(() => {
+					this.$toast.clear()
+					reponse = reponse.body
+					if (reponse.success) {
+						this.$router.push('/store/memberChangeSuccess')
+					}
+				}, 500);
+			})
+		}
+
 	},
 	watch: {
-		userIntegral: function () {
+		totalResult: function () {
 			this.disabled = false
 		},
 		userInput: function () {
 			this.showConfirmButton = !!(this.userInput)
 		}
+	},
+	created() {
+		this.$toast.loading({ mask: false, message: '加载中...' });
+
+		this.id = this.$route.params.id
+
+		this.$http.get('/app/shop/memberById', {
+			params: {
+				id: this.id
+			}
+		}).then(reponse => {
+			setTimeout(() => {
+				this.$toast.clear()
+				reponse = reponse.body
+
+				this.User = reponse.data
+			}, 500);
+		})
 	}
 
 }

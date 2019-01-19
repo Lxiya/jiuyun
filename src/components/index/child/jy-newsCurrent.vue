@@ -8,15 +8,19 @@
 					</div>
 					<div class="content-list">
 						<!-- a new start -->
-						<router-link to="index/news/newsContent">
-							<div class="list-item">
-								<div class="item-info">
-									<span class="item-type">【公告】</span>
-									<p class="item-title">9·云在线正式于2019年2月2号正式我我我</p>
-								</div>
-								<div class="item-time">发布时间：2019-01-02</div>
+						<div
+							class="list-item"
+							v-for="(item,index) in currentNewsList"
+							@click="goAppActivity(''+activityPath+'/index/news/newsContent/'+item.id+'','新闻详情')"
+						>
+							<!-- <router-link :to="{path:'/index/news/newsContent/'+item.id+''}"> -->
+							<div class="item-info">
+								<span class="item-type">【公告】</span>
+								<p class="item-title">{{item.artName}}</p>
 							</div>
-						</router-link>
+							<div class="item-time">{{item.createTime2}}</div>
+							<!-- </router-link> -->
+						</div>
 						<!-- a new end -->
 					</div>
 				</div>
@@ -28,7 +32,24 @@
 <script>
 
 export default {
-	name: 'jyNewsCurrent'
+	name: 'jyNewsCurrent',
+	data() {
+		return {
+			currentNewsList: []
+		}
+	},
+	created() {
+		this.$http.get('/app/index/newsList', {
+			params: {
+				page: 1,
+				size: 2
+			}
+		}).then(reponse => {
+			reponse = reponse.body
+
+			this.currentNewsList = reponse.data.list
+		})
+	}
 }
 </script>
 

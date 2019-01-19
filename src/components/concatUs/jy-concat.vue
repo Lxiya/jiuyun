@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<div class="concat page-with-nav-top">
-			<NavTop :title="title"/>
 			<RadiusBg>
 				<div class="concat-content" slot="content">
 					<div class="concat-wrapper company-address">
@@ -18,7 +17,7 @@
 						<h1>公司电话</h1>
 						<h2>有意向加盟、咨询问题、询问酒水</h2>
 						<h3>0531-58676918</h3>
-						<p class="btn-call">立即拨打</p>
+						<p class="btn-call" @click="call('053158676918')">立即拨打</p>
 					</div>
 				</div>
 			</RadiusBg>
@@ -34,15 +33,16 @@ export default {
 			// 头部导航配置参数
 			title: '联系我们'
 		}
-
-
+	},
+	methods: {
+		call(phone) {
+			window.closeActJsImpl.callPhone(phone)
+		}
 	}
 }
 </script>
 
 <style lang="stylus" scoped>
-.page-with-nav-top.concat
-	padding-top 1.26rem
 .concat-content
 	padding 0.5rem 0 0.7rem 0
 	margin-bottom 0.3rem

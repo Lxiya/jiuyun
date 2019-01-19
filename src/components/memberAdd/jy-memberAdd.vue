@@ -4,27 +4,33 @@
 			<NavTop :title="title"/>
 			<div class="from-group">
 				<div class="input-group">
-					<van-field v-model="userName" label="姓名：" required placeholder="会员姓名"/>
+					<van-field v-model="Member.nickName" label="姓名：" required placeholder="会员姓名"/>
 				</div>
 				<div class="input-group">
-					<van-field v-model="sex" label="性别" placeholder="会员性别" @click="showSexPopup"/>
+					<van-field v-model="Member.sex" label="性别" placeholder="会员性别" readonly @click="showSexPopup"/>
 				</div>
 				<div class="input-group">
-					<van-field v-model="phone" label="手机号：" required placeholder="手机号"/>
+					<van-field v-model="Member.phoneNumber" label="手机号：" required placeholder="手机号"/>
 				</div>
 				<div class="input-group">
-					<van-field v-model="password" label="密码：" placeholder="默认初始密码123456" type="password"/>
+					<van-field
+						v-model="Member.password"
+						label="密码："
+						placeholder="(选填)默认密码为123456"
+						type="password"
+					/>
 				</div>
 				<div class="input-group">
-					<van-field v-model="confirmPaasword" label="确认密码：" placeholder="请确认密码" type="password"/>
+					<van-field v-model="repeatPassword" label="确认密码：" placeholder="请确认密码" type="password"/>
 				</div>
 				<div class="input-group last-group">
 					<van-field
-						v-model="brithday"
+						v-model="Member.birthday"
 						label="出生年月："
 						required
 						placeholder="出生年月"
-						@click="showDataPopup"
+						readonly
+						@click="showDatePopup"
 					/>
 				</div>
 			</div>
@@ -42,7 +48,7 @@
 					:formatter="formatter"
 					:min-date="minDate"
 					:max-date="maxDate"
-					@cancel="cancel"
+					@cancel="cancelDate"
 					@confirm="getSelectedDate"
 				/>
 			</van-popup>
@@ -62,6 +68,8 @@
 </template>
 
 <script>
+import { RegJudge } from '../../../static/js/RegJudge'
+
 export default {
 	name: 'jyMemberAdd',
 	data() {
@@ -69,14 +77,16 @@ export default {
 			// 头部导航配置参数
 			title: '添加会员',
 
-			userName: '',
-			sex: '',
-			sexIndex: '',
-			phone: '',
-			password: '',
-			confirmPaasword: '',
-			brithday: '',
-			shopCode: '',
+			repeatPassword: '',
+
+			Member: {
+				nickName: '',
+				phoneNumber: '',
+				password: '',
+				birthday: '',
+				sex: '',
+				shopCode: ''
+			},
 
 			disabled: true,
 			dataShow: false,
@@ -88,15 +98,11 @@ export default {
 		}
 	},
 	methods: {
-		submitAdd() {
-			// alert('提交')
-		},
-
 		//时间日期选择弹出层
-		showDataPopup() {
+		showDatePopup() {
 			this.dataShow = true
 		},
-		cancel() {
+		cancelDate() {
 			this.dataShow = false
 		},
 
@@ -108,7 +114,7 @@ export default {
 			this.sexShow = false
 		},
 
-
+		// 时间日期格式转换
 		formatter(type, value) {
 			if (type === 'year') {
 				return `${value}年`;
@@ -119,38 +125,61 @@ export default {
 			}
 			return value;
 		},
-
-		// 获得生日
 		getSelectedDate(value) {
 			let date = new Date(value)
 			date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()
-			this.brithday = date
+			this.Member.birthday = date
 			this.dataShow = false
-
 		},
 
-		// 获得性别
 		getSelectedSex(value, index) {
-			this.sex = value
-			this.sexIndex = index
+			this.Member.sex = value
 			this.sexShow = false
 		},
 
-		// 请求
+		// 改变按钮状态
+		changeButtonStatus(value) {
+			value ? this.disabled = false : this.disabled = true
+		},
+
 		submitAdd() {
-			this.$http.get('/app/shop/addMember', {
-				params: {
-					nickName: this.userName,
-					phoneNumber: this.phone,
-					password: this.password,
-					birthday: this.brithday,
-					shopCode: this.shopCode
+			let _vm = this
+
+			if (RegJudge.judgeNull(this.Member.sex, '性别', _vm)) {
+				if (RegJudge.judgePhone(this.Member.phoneNumber, '手机号码', _vm)) {
+					if (RegJudge.judgePassword(this.Member.password, this.repeatPassword, '密码', _vm)) {
+						if (RegJudge.judgeNull(this.Member.birthday, '出生日期', _vm)) {
+							this.$toast.loading({ mask: false, message: '处理中...' });
+
+							this.disabled = true
+
+							this.$http.get('/app/shop/addMember', {
+								params: this.Member
+							}).then(reponse => {
+								setTimeout(() => {
+									this.$toast.clear()
+
+									reponse = reponse.body
+
+									reponse.success ? this.$router.push('/store/memberAddSuccess') : (reponse.code ? (this.$toast('手机号已注册'), this.disabled = false) : false)
+								}, 500);
+							})
+						}
+					}
 				}
-			}).then(reponse => {
-				reponse = reponse.body
-			})
+			} else {
+				return false
+			}
 		}
 
+	},
+	watch: {
+		'Member.nickName'(value) {
+			this.changeButtonStatus(value)
+		}
+	},
+	created() {
+		this.Member.shopCode = this.$store.getters.getShopCode
 	}
 }
 </script>

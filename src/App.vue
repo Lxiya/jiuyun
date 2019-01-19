@@ -1,8 +1,9 @@
 <template>
 	<div>
-		<transition name="transitionLeft">
-			<router-view></router-view>
-		</transition>
+		<keep-alive>
+			<router-view v-if="$route.meta.keepAlive"></router-view>
+		</keep-alive>
+		<router-view v-if="!$route.meta.keepAlive"></router-view>
 	</div>
 </template>
 

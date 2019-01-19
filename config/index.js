@@ -3,6 +3,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
+const target = 'http://192.168.1.3:8080' //本地测试接口
+// const target = 'http://47.104.104.204:8080' //线上测试接口
 
 module.exports = {
   dev: {
@@ -11,17 +13,24 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/app/index': {
-        target: 'http://47.104.104.204:8080/app/index',
+        target: '' + target + '/app/index',
         changeOrigin: true,
         pathRewrite: {
           '^/app/index': ''
         }
       },
       '/app/shop': {
-        target: 'http://47.104.104.204:8080/app/shop',
+        target: '' + target + '/app/shop',
         changeOrigin: true,
         pathRewrite: {
           '^/app/shop': ''
+        }
+      },
+      '/app/member': {
+        target: '' + target + '/app/member',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/app/member': ''
         }
       }
     },

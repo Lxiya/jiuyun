@@ -2,7 +2,9 @@
 .page-with-nav-top
 	min-height 100vh
 	box-sizing border-box
-	padding-top 0.96rem
+	padding-top 0.3rem
+	&.top
+		padding-top 0.96rem
 /* variables */
 $gray = #f5f4f4
 /* common style */
@@ -23,6 +25,7 @@ h1, h2, h3, h4, h5, h6
 	padding 0
 a
 	cursor pointer
+	color #333
 /* vant reset */
 div.jy-header
 	.header-swiper
@@ -76,3 +79,11 @@ div.member-list
 		color #676767
 	.van-icon-search
 		font-size 0.35rem
+div.member-wrapper
+	.van-pull-refresh__head
+		top 0
+	.van-nav-bar__left
+		display none
+div.integral-list
+	.van-row.van-row--flex.van-row--justify-space-between
+		flex-wrap wrap
