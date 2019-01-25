@@ -76,7 +76,7 @@ export default {
 						this.$toast.success('提交成功!')
 						setTimeout(() => {
 							this.$toast.clear()
-							window.closeActJsImpl.closeActJsImpl()
+							window.closeActJsImpl.closeActForJs()
 						}, 1000);
 					}
 				}, 1000);

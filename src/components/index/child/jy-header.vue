@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<div class="header-swiper">
-			<van-swipe indicator-color="white">
-				<van-swipe-item v-for="(image,index) in images" :key="index">
+			<van-swipe :autoplay="2000" indicator-color="white">
+				<van-swipe-item v-for="(image,index) in imagesList" :key="index">
 					<img :src="image">
 				</van-swipe-item>
 			</van-swipe>
@@ -15,13 +15,29 @@ export default {
 	name: 'jyHeader',
 	data() {
 		return {
-			images: [
-				'static/images/banner.png',
-				'static/images/banner.png',
-				'static/images/banner.png'
-			],
-			// showIndicators: false
+			imagesList: []
 		}
+	},
+	computed: {
+		images: {
+			get() {
+				return this.imagesList
+			},
+			set(newValue) {
+				for (let property in newValue) {
+					this.imagesList.push(newValue[property])
+				}
+			}
+		}
+	},
+	created() {
+		this.$http.get('/app/index/banner', {
+			params: {}
+		}).then(reponse => {
+			reponse = reponse.body
+
+			this.images = reponse.data
+		})
 	}
 }
 </script>
@@ -31,7 +47,7 @@ export default {
 	box-sizing border-box
 	img
 		display block
-		max-width 100%
-		height auto
+		min-width 100%
+		max-height 4.38rem
 </style>
 

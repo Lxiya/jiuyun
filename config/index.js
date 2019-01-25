@@ -3,8 +3,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-const target = 'http://192.168.1.3:8080' //本地测试接口
-// const target = 'http://47.104.104.204:8080' //线上测试接口
+// const target = 'http://192.168.1.3:8080' //本地测试接口
+const target = 'http://47.104.104.204:8080' //线上测试接口
 
 module.exports = {
   dev: {

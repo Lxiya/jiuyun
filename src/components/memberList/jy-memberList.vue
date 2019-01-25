@@ -71,8 +71,7 @@ export default {
 					this.memberList = []
 					this.total = 0
 				}
-		
-
+				
 				this.loading = false
 
 				if (this.memberList.length === this.total) {

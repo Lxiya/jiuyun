@@ -10,7 +10,7 @@
 					<van-field v-model="Member.sex" label="性别" placeholder="会员性别" readonly @click="showSexPopup"/>
 				</div>
 				<div class="input-group">
-					<van-field v-model="Member.phoneNumber" label="手机号：" required placeholder="手机号"/>
+					<van-field v-model="Member.phoneNumber" label="手机号：" required placeholder="手机号" type="number"/>
 				</div>
 				<div class="input-group">
 					<van-field
@@ -161,7 +161,9 @@ export default {
 
 									reponse = reponse.body
 
-									reponse.success ? this.$router.push('/store/memberAddSuccess') : (reponse.code ? (this.$toast('手机号已注册'), this.disabled = false) : false)
+									reponse.success ?
+										(this.$router.push('/store/memberAddSuccess'), window.shopJsImpl.refreshVip()) :
+										(reponse.code ? (this.$toast('手机号已注册'), this.disabled = false) : false)
 								}, 500);
 							})
 						}

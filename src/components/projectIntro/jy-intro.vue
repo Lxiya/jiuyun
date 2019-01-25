@@ -33,5 +33,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.intro-content
+	padding 0 0.5rem
 </style>
 

@@ -3,19 +3,21 @@
 		<div class="news-center page-with-nav-top">
 			<div class="news-center-list">
 				<!-- a news start -->
-				<div class="list-item" v-for="(item,index) in newsList">
-					<router-link :to="{path:'/index/news/newsContent/'+item.id+''}">
-						<div class="item-title">{{item.artName}}</div>
-						<div class="item-intro">{{item.jianjie}}</div>
-						<div class="item-time-detail">
-							<div class="time">{{item.createTime2}}</div>
-							<div class="go-detail">
-								查看详情
-								<span class="lt">&gt;</span>
+				<van-list v-model="loading" :finished="finished" @load="loadMore" finished-text="没有更多了">
+					<div class="list-item" v-for="(item,index) in newsList">
+						<router-link :to="{path:'/index/news/newsContent/'+item.id+''}">
+							<div class="item-title">{{item.artName}}</div>
+							<div class="item-intro">{{item.jianjie}}</div>
+							<div class="item-time-detail">
+								<div class="time">{{item.createTime2}}</div>
+								<div class="go-detail">
+									查看详情
+									<span class="lt">&gt;</span>
+								</div>
 							</div>
-						</div>
-					</router-link>
-				</div>
+						</router-link>
+					</div>
+				</van-list>
 				<!-- a news end -->
 			</div>
 		</div>
@@ -30,23 +32,49 @@ export default {
 			// 头部导航配置参数
 			title: '新闻中心',
 
-			newsList: []
+			newsList: [],
+
+			// 分页配置
+			page: 1,
+			size: 10,
+			total: 0,
+			loading: false,
+			finished: false,
 		}
 	},
-	created() {
-		this.$http.get('/app/index/newsList', {
-			params: {
-				page: 1,
-				size: 10
-			}
-		}).then(reponse => {
-			setTimeout(() => {
+	methods: {
+		requestData() {
+			this.$http.get('/app/index/newsList', {
+				params: {
+					page: this.page,
+					size: this.size
+				}
+			}).then(reponse => {
 				reponse = reponse.body
-				this.newsList = reponse.data.list
 
-				console.log(reponse)
-			}, 500);
-		})
+				if (reponse.data) {
+					this.newsList = this.newsList.concat(reponse.data.list)
+					this.total = reponse.data.total
+				} else {
+					this.newsList = []
+					this.total = 0
+				}
+
+				this.loading = false
+
+				if (this.newsList.length === this.total) {
+					this.finished = true
+				}
+			})
+		},
+
+		//加载更多
+		loadMore() {
+			setTimeout(() => {
+				this.requestData()
+				this.page++
+			}, 500)
+		},
 	}
 }
 </script>

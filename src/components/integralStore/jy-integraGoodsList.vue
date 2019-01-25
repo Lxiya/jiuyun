@@ -44,8 +44,14 @@ export default {
 			}).then(reponse => {
 				reponse = reponse.body
 
-				this.goodsList = this.goodsList.concat(reponse.data.list)
-				this.total = reponse.data.total
+				if (reponse.data) {
+					this.goodsList = this.goodsList.concat(reponse.data.list)
+					this.total = reponse.data.total
+				} else {
+					this.goodsList = []
+					this.total = 0
+				}
+
 				this.loading = false
 
 				if (this.goodsList.length === this.total) {

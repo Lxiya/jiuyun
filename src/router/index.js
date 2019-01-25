@@ -45,7 +45,10 @@ export default new Router({
     },
     {
       path: '/index/newsCenter',
-      component: jyNewsCenter
+      component: jyNewsCenter,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/index/news/newsContent/:id',

@@ -19,7 +19,7 @@ import jyHeader from '@/components/index/child/jy-header'
 import jyHeaderNav from '@/components/index/child/jy-headerNav'
 import jyNewsCurrent from '@/components/index/child/jy-newsCurrent'
 
-
+	
 export default {
 	name: 'jyIndex',
 	components: {
@@ -33,7 +33,7 @@ export default {
 <style lang="stylus" scoped>
 div.index
 	position relative
-	min-height 4.38rem
+	height 4.38rem
 	.jy-header-nav
 		position absolute
 		left 0

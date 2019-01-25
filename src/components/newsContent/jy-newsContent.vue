@@ -30,7 +30,6 @@ export default {
 
 		this.newsId = this.$route.params.id
 
-
 		this.$http.get('/app/index/articleDetail', {
 			params: {
 				id: this.newsId
@@ -53,7 +52,6 @@ export default {
 
 <style lang="stylus" scoped>
 .news-content
-	height 100vh
 	background-color #fff
 	.gray-bg
 		height 0.2rem

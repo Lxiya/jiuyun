@@ -26,10 +26,9 @@ Vue.component('RadiusBg', RadiusBg)
 Vue.component('Success', Success)
 Vue.component('MemberListItem', MemberListItem)
 Vue.component('IntegralExchange', IntegralExchange)
-
 //Vue 全局通用属性和方法
-// Vue.prototype.activityPath = 'http://47.104.104.204:8080/jiuyun/#' //线上测试页面
-Vue.prototype.activityPath = 'http://192.168.1.10:8080/jiuyun/#' //本地测试页面
+Vue.prototype.activityPath = 'http://47.104.104.204:8080/jiuyun/#' //线上测试页面
+// Vue.prototype.activityPath = 'http://192.168.1.13:8080/jiuyun/#' //本地测试页面
 
 Vue.prototype.goAppActivity = function(url, title) {
   window.shopJsImpl.getUrlJsServer(url, title)

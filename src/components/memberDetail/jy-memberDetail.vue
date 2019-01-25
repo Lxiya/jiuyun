@@ -4,7 +4,9 @@
 			<NavTop :title="title"/>
 			<div class="detail-top">
 				<div class="detail-img">
-					<img src="static/images/member-icon-default-man.png" alt>
+					<img :src="User.userHeadimg" alt v-if="User.userHeadimg">
+					<img src="static/images/member-icon-default-woman.png" alt v-else-if="User.sex ==='女'">
+					<img src="static/images/member-icon-default-man.png" alt v-else>
 				</div>
 				<div class="detail-info">
 					<p>会员：{{User.nickName}}</p>
