@@ -5,8 +5,8 @@
 				<div class="concat-content" slot="content">
 					<div class="concat-wrapper company-address">
 						<h1>公司地址</h1>
-						<h2>山东云子电子商务有限公司</h2>
-						<h3>山东省济南市绿地中央广场C3地块A座22层</h3>
+						<h2>济南九云山酿酒有限公司</h2>
+						<h3>济南市槐荫区中建锦绣广场2号楼5层</h3>
 					</div>
 				</div>
 			</RadiusBg>
@@ -16,8 +16,8 @@
 					<div class="concat-wrapper company-phone">
 						<h1>公司电话</h1>
 						<h2>有意向加盟、咨询问题、询问酒水</h2>
-						<h3>0531-58676918</h3>
-						<p class="btn-call" @click="call('053158676918')">立即拨打</p>
+						<h3>0531-67867799</h3>
+						<p class="btn-call" @click="call('053167867799')">立即拨打</p>
 					</div>
 				</div>
 			</RadiusBg>

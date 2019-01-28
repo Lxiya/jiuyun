@@ -15,6 +15,15 @@
 							<div class="input-group" style="margin-bottom:0.27rem">
 								<van-field v-model="phone" label="电话：" type="number"/>
 							</div>
+							<div class="input-group" style="margin-bottom:0.27rem">
+								<van-field
+									v-model="selectedArea"
+									label="所在区域："
+									type="text"
+									@click="showAreaPopup"
+									readonly
+								/>
+							</div>
 							<div class="last-group input-group leave-message">
 								<van-field v-model="message" type="textarea" placeholder="添加您的留言" rows="3" autosize/>
 							</div>
@@ -33,10 +42,22 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- 区域选择弹出层 -->
+		<van-popup v-model="areaShow" position="bottom">
+			<van-area
+				:area-list="areaList"
+				:columns-num="3"
+				@confirm="confirmSelected"
+				@cancel="showAreaPopup"
+			/>
+		</van-popup>
 	</div>
 </template>
 
 <script>
+import AreaList from '../../../static/js/Area'
+
 export default {
 	name: 'jyJoinUs',
 	data() {
@@ -45,48 +66,82 @@ export default {
 			title: '加盟申请',
 			border: false,
 
+			areaShow: false,
+			areaList: {},
+			areaArray: [],
+
 			userName: '',
 			phone: '',
 			message: '',
+			address: '',
 			disabled: true,
 
 			quickMessage: ['我有意加盟', '请尽快与我联系']
+		}
+	},
+	computed: {
+		selectedArea: {
+			get() {
+				return this.areaArray.join('-')
+			},
+			set(newValue) {
+				this.areaArray.length = 0
+				newValue.forEach((value, index) => {
+					this.areaArray.push(value.name)
+				})
+			}
 		}
 	},
 	methods: {
 		insertQuickMessage(message) {
 			this.message = message
 		},
+		showAreaPopup() {
+			this.areaShow = !this.areaShow
+		},
+		confirmSelected(area) {
+			this.showAreaPopup()
+			this.selectedArea = area
+		},
 
 		// 提交加盟申请
 		submitJoin() {
-			this.$toast.loading({ mask: false, message: '处理中...' });
+			if (this.selectedArea) {
+				this.$toast.loading({ mask: false, message: '处理中...' });
 
-			this.$http.get('/app/index/jamengSave', {
-				params: {
-					name: this.userName,
-					phoneNumber: this.phone,
-					remark: this.message
-				}
-			}).then(reponse => {
-				setTimeout(() => {
-					this.$toast.clear()
-					reponse = reponse.body
-					if (reponse.success) {
-						this.$toast.success('提交成功!')
-						setTimeout(() => {
-							this.$toast.clear()
-							window.closeActJsImpl.closeActForJs()
-						}, 1000);
+				this.$http.get('/app/index/jamengSave', {
+					params: {
+						name: this.userName,
+						phoneNumber: this.phone,
+						remark: this.message,
+						area: this.selectedArea
 					}
-				}, 1000);
-			})
+				}).then(reponse => {
+					setTimeout(() => {
+						this.$toast.clear()
+						reponse = reponse.body
+						if (reponse.success) {
+							this.$toast.success('提交成功!')
+							setTimeout(() => {
+								this.$toast.clear()
+								window.closeActJsImpl.closeActForJs()
+							}, 1000);
+						}
+					}, 1000);
+				})
+			} else {
+				this.$toast('请选择所在区域')
+			}
 		}
+
 	},
 	watch: {
 		phone: function () {
 			this.disabled = !((/^1[34578]\d{9}$/.test(this.phone)) && this.userName.trim() != '')
 		}
+	},
+	mounted() {
+		this.areaList = AreaList
 	}
 }
 </script>
@@ -94,6 +149,9 @@ export default {
 <style lang="stylus" scoped>
 .join-us
 	min-height 100vh
+	width 100%
+	overflow hidden
+	overflow-y scroll
 	background-color #fff
 	.join-us-content
 		.join-banner
@@ -113,8 +171,6 @@ export default {
 				border-top-left-radius 0.3rem
 				border-top-right-radius 0.3rem
 		.join-input
-			display flex
-			justify-content center
 			position relative
 			height 0.24rem
 			width 95%
@@ -125,6 +181,7 @@ export default {
 			.join-input-from
 				position absolute
 				top 0.15rem
+				left 0.24rem
 				width 93%
 				padding-top 0.54rem
 				padding-bottom 0.5rem

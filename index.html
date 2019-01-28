@@ -10,7 +10,11 @@
     <!-- built files will be auto injected -->
   </body>
   <script>
-    let rem = window.screen.width
-    document.documentElement.style.fontSize = 100 * (rem / 750) + 'px'
+    let setFontSize = () => {
+      let rem = window.screen.width
+      document.documentElement.style.fontSize = 100 * (rem / 750) + 'px'
+    }
+    setFontSize()
+    window.onresize = setFontSize
   </script>
 </html>

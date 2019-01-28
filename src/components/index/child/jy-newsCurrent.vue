@@ -77,7 +77,7 @@ export default {
 				span.item-type
 					color #fa7554
 				p.item-title
-					max-width 5.3rem
+					max-width 5rem
 					white-space nowrap
 					overflow hidden
 					text-overflow ellipsis

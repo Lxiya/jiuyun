@@ -20,7 +20,7 @@ export default {
 	},
 	created() {
 		this.$http.get('/app/index/articleDetail',
-			{ params: { id: '1234567890' } }).then(reponse => {
+			{ params: { id: '98a65e3c2f0649fab1830fcd0640f759' } }).then(reponse => {
 				setTimeout(() => {
 					reponse = reponse.body
 					this.content = reponse.data.content
